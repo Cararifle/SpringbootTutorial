@@ -30,6 +30,10 @@ public class ClientServiceImpl implements ClientService {
 
         Client client;
 
+        if (clientRepository.existsByName(dto.getName())) {
+            throw new RuntimeException("Ya existe un cliente con ese nombre");
+        }
+
         if (id == null) {
             client = new Client();
         } else {
