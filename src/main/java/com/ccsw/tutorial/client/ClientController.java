@@ -37,10 +37,28 @@ public class ClientController {
         return clients.stream().map(e -> mapper.map(e, ClientDto.class)).collect(Collectors.toList());
     }
 
+    /**
+     * Metodo para crear o actualizar un {@link Client}
+     *
+     * @param id PK de la entidad
+     * @param dto datos de la entidad
+     */
     @Operation(summary = "Save or Update", description = "Method that saves or update a Client")
     @RequestMapping(path = { "", "/{id}" }, method = RequestMethod.PUT)
     public void save(@PathVariable(name = "id", required = false) Long id, @RequestBody ClientDto dto) {
 
         this.clientService.save(id, dto);
+    }
+
+    /**
+     * Metodo par eliminar un cliente
+     *
+     * @param id PK de la entidad
+     */
+    @Operation(summary = "Delete", description = "Method that deletes a Client")
+    @RequestMapping(path = "/{id}", method = RequestMethod.DELETE)
+    public void delete(@PathVariable("id") Long id) throws Exception {
+
+        this.clientService.delete(id);
     }
 }
