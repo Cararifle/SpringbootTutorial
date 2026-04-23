@@ -2,10 +2,6 @@ package com.ccsw.tutorial.author.model;
 
 import jakarta.persistence.*;
 
-/**
- * @author ccsw
- *
- */
 @Entity
 @Table(name = "author")
 public class Author {

@@ -14,10 +14,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
-/**
- * @author ccsw
- *
- */
 @Tag(name = "Author", description = "API of Author")
 @RequestMapping(value = "/author")
 @RestController
@@ -29,7 +25,7 @@ public class AuthorController {
 
     @Autowired
     ModelMapper mapper;
-    
+
     /**
      * Recupera un listado de autores {@link Author}
      *

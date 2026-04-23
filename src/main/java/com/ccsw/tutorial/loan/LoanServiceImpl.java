@@ -1,4 +1,54 @@
 package com.ccsw.tutorial.loan;
 
-public class LoanServiceImpl {
+import com.ccsw.tutorial.loan.model.Loan;
+import com.ccsw.tutorial.loan.model.LoanDto;
+import com.ccsw.tutorial.loan.model.LoanSearchDto;
+import jakarta.transaction.Transactional;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.stereotype.Service;
+
+@Service
+@Transactional
+public class LoanServiceImpl implements LoanService {
+
+    @Autowired
+    LoanRepository loanRepository;
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Page<Loan> findPage(LoanSearchDto dto) {
+        return this.loanRepository.findAll(dto.getPageable().getPageable());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void save(Long id, LoanDto data) {
+        Loan loan;
+
+        if (id == null) {
+            loan = new Loan();
+        } else {
+            loan = this.loanRepository.findById(id).orElse(null);
+        }
+
+        BeanUtils.copyProperties(data, loan, "id");
+
+        this.loanRepository.save(loan);
+    }
+
+    @Override
+    public void delete(Long id) throws Exception {
+
+        if (this.loanRepository.findById(id).orElse(null) == null) {
+            throw new Exception("Not Exists");
+        }
+
+        this.loanRepository.deleteById(id);
+    }
 }

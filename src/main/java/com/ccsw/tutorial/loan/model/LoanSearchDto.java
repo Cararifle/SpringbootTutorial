@@ -1,8 +1,8 @@
-package com.ccsw.tutorial.author.model;
+package com.ccsw.tutorial.loan.model;
 
 import com.ccsw.tutorial.common.pagination.PageableRequest;
 
-public class AuthorSearchDto {
+public class LoanSearchDto {
 
     private PageableRequest pageable;
 

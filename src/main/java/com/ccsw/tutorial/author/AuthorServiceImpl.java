@@ -11,10 +11,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-/**
- * @author ccsw
- *
- */
 @Service
 @Transactional
 public class AuthorServiceImpl implements AuthorService {

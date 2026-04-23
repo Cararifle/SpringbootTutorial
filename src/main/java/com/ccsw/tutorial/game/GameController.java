@@ -11,10 +11,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
-/**
- * @author ccsw
- *
- */
 @Tag(name = "Game", description = "API of Game")
 @RequestMapping(value = "/game")
 @RestController
