@@ -5,6 +5,8 @@ import com.ccsw.tutorial.loan.model.LoanDto;
 import com.ccsw.tutorial.loan.model.LoanSearchDto;
 import org.springframework.data.domain.Page;
 
+import java.util.List;
+
 public interface LoanService {
 
     /**
@@ -29,4 +31,13 @@ public interface LoanService {
      * @param id PK de la entidad
      */
     void delete(Long id) throws Exception;
+
+    /**
+     * Recuperar los prestamos filtrando opcionalmente por titulo y/o categoria
+     *
+     * @param idGame PK del juego
+     * @param idClient PK del cliente
+     * @return {@link List} de {@link Loan}
+     */
+    List<Loan> find(Long idGame, Long idClient);
 }

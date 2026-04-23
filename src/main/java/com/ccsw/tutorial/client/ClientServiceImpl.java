@@ -58,4 +58,12 @@ public class ClientServiceImpl implements ClientService {
 
         this.clientRepository.deleteById(id);
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Client get(Long id) {
+        return this.clientRepository.findById(id).orElse(null);
+    }
 }
