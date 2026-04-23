@@ -20,10 +20,10 @@ INSERT INTO client(name) VALUES ('Cliente 1');
 INSERT INTO client(name) VALUES ('Cliente 2');
 INSERT INTO client(name) VALUES ('Cliente 3');
 
-INSERT INTO loan(game_id, client_id, startDate, endDate) VALUES (1,1,'2026-04-01', '2026-04-10')
-INSERT INTO loan(game_id, client_id, startDate, endDate) VALUES (2,1,'2026-04-01', '2026-04-10')
-INSERT INTO loan(game_id, client_id, startDate, endDate) VALUES (3,2,'2026-04-01', '2026-04-10')
-INSERT INTO loan(game_id, client_id, startDate, endDate) VALUES (4,2,'2026-04-01', '2026-04-10')
-INSERT INTO loan(game_id, client_id, startDate, endDate) VALUES (5,3,'2026-04-01', '2026-04-10')
-INSERT INTO loan(game_id, client_id, startDate, endDate) VALUES (6,3,'2026-04-01', '2026-04-10')
+INSERT INTO loan(game_id, client_id, start_date, end_date) VALUES (1,1,'2026-04-01', '2026-04-10');
+INSERT INTO loan(game_id, client_id, start_date, end_date) VALUES (2,1,'2026-04-01', '2026-04-10');
+INSERT INTO loan(game_id, client_id, start_date, end_date) VALUES (3,2,'2026-04-01', '2026-04-10');
+INSERT INTO loan(game_id, client_id, start_date, end_date) VALUES (4,2,'2026-04-01', '2026-04-10');
+INSERT INTO loan(game_id, client_id, start_date, end_date) VALUES (5,3,'2026-04-01', '2026-04-10');
+INSERT INTO loan(game_id, client_id, start_date, end_date) VALUES (6,3,'2026-04-01', '2026-04-10');
 
