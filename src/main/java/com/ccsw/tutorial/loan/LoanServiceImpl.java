@@ -1,19 +1,17 @@
 package com.ccsw.tutorial.loan;
 
 import com.ccsw.tutorial.client.ClientService;
-import com.ccsw.tutorial.common.criteria.SearchCriteria;
 import com.ccsw.tutorial.game.GameService;
 import com.ccsw.tutorial.loan.model.Loan;
 import com.ccsw.tutorial.loan.model.LoanDto;
 import com.ccsw.tutorial.loan.model.LoanSearchDto;
 import jakarta.transaction.Transactional;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 @Transactional
@@ -28,13 +26,8 @@ public class LoanServiceImpl implements LoanService {
     @Autowired
     ClientService clientService;
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Page<Loan> findPage(LoanSearchDto dto) {
-        return this.loanRepository.findAll(dto.getPageable().getPageable());
-    }
+    @Autowired
+    ModelMapper modelMapper;
 
     /**
      * {@inheritDoc}
@@ -68,13 +61,24 @@ public class LoanServiceImpl implements LoanService {
     }
 
     @Override
-    public List<Loan> find(Long idGame, Long idClient) {
+    public Page<LoanDto> findPage(LoanSearchDto dto) {
 
-        LoanSpecification gameSpec = new LoanSpecification(new SearchCriteria("game.id", ":", idGame));
-        LoanSpecification clientSpec = new LoanSpecification(new SearchCriteria("client.id", ":", idClient));
+        Specification<Loan> spec = (root, query, cb) -> cb.conjunction();
 
-        Specification<Loan> spec = gameSpec.and(clientSpec);
+        if (dto.getClientId() != null) {
+            spec = spec.and(LoanSpecification.hasClientId(dto.getClientId()));
+        }
 
-        return this.loanRepository.findAll(spec);
+        if (dto.getGameId() != null) {
+            spec = spec.and(LoanSpecification.hasGameId(dto.getGameId()));
+        }
+
+        if (dto.getDate() != null) {
+            spec = spec.and(LoanSpecification.hasDate(dto.getDate()));
+        }
+
+        Page<Loan> page = loanRepository.findAll(spec, dto.getPageable().getPageable());
+
+        return page.map(loan -> modelMapper.map(loan, LoanDto.class));
     }
 }
