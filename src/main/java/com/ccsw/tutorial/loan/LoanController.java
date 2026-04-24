@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.stream.Collectors;
 
 @Tag(name = "Loan", description = "API of Loan")
@@ -27,9 +28,10 @@ public class LoanController {
 
     @Operation(summary = "Find Filtered Page", description = "Method that returns a filtered page of Loans")
     @RequestMapping(path = "", method = RequestMethod.POST)
-    public Page<LoanDto> findFilteredPage(@RequestBody LoanSearchDto dto, @RequestParam(value = "idGame", required = false) Long idGame, @RequestParam(value = "idClient", required = false) Long idClient) {
+    public Page<LoanDto> findFilteredPage(@RequestBody LoanSearchDto dto, @RequestParam(value = "idGame", required = false) Long idGame, @RequestParam(value = "idClient", required = false) Long idClient,
+            @RequestParam(value = "date", required = false) Date date) {
 
-        Page<Loan> loans = this.loanService.findFilteredPage(dto, idGame, idClient);
+        Page<Loan> loans = this.loanService.findFilteredPage(dto, idGame, idClient, date);
 
         return new PageImpl<>(loans.getContent().stream().map(e -> mapper.map(e, LoanDto.class)).collect(Collectors.toList()), loans.getPageable(), loans.getTotalElements());
     }
