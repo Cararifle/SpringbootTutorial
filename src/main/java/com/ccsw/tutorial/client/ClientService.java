@@ -28,4 +28,12 @@ public interface ClientService {
      * @param id PK de la entidad
      */
     void delete(Long id) throws Exception;
+
+    /**
+     * Recupera un {@link Client} a traves de su id
+     *
+     * @param id PK de la entidad
+     * @return {@link Client}
+     */
+    Client get(Long id);
 }

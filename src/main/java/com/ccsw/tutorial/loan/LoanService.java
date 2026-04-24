@@ -1,0 +1,15 @@
+package com.ccsw.tutorial.loan;
+
+import com.ccsw.tutorial.loan.model.Loan;
+import com.ccsw.tutorial.loan.model.LoanDto;
+import com.ccsw.tutorial.loan.model.LoanSearchDto;
+import org.springframework.data.domain.Page;
+
+public interface LoanService {
+
+    Page<Loan> findFilteredPage(LoanSearchDto dto, Long idGame, Long idClient);
+
+    void save(Long id, LoanDto dto);
+
+    void delete(Long id) throws Exception;
+}
