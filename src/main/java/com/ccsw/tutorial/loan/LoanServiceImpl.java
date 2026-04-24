@@ -13,6 +13,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
+
 @Service
 @Transactional
 public class LoanServiceImpl implements LoanService {
@@ -27,12 +29,20 @@ public class LoanServiceImpl implements LoanService {
     ClientService clientService;
 
     @Override
-    public Page<Loan> findFilteredPage(LoanSearchDto dto, Long idGame, Long idClient) {
+    public Page<Loan> findFilteredPage(LoanSearchDto dto, Long idGame, Long idClient, Date date) {
 
-        LoanSpecification gameSpec = new LoanSpecification(new SearchCriteria("game.id", ":", idGame));
-        LoanSpecification clientSpec = new LoanSpecification(new SearchCriteria("client.id", ":", idClient));
+        Specification<Loan> spec = Specification.unrestricted();
+        if (idGame != null) {
+            spec = spec.and(new LoanSpecification(new SearchCriteria("game.id", ":", idGame)));
+        }
 
-        Specification<Loan> spec = gameSpec.and(clientSpec);
+        if (idClient != null) {
+            spec = spec.and(new LoanSpecification(new SearchCriteria("client.id", ":", idClient)));
+        }
+
+        if (date != null) {
+            spec = spec.and(LoanSpecification.dateBetween(date));
+        }
 
         return this.loanRepository.findAll(spec, dto.getPageable().getPageable());
 
