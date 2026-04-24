@@ -9,6 +9,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
@@ -29,7 +30,7 @@ public class LoanController {
     @Operation(summary = "Find Filtered Page", description = "Method that returns a filtered page of Loans")
     @RequestMapping(path = "", method = RequestMethod.POST)
     public Page<LoanDto> findFilteredPage(@RequestBody LoanSearchDto dto, @RequestParam(value = "idGame", required = false) Long idGame, @RequestParam(value = "idClient", required = false) Long idClient,
-            @RequestParam(value = "date", required = false) Date date) {
+            @RequestParam(value = "date", required = false) @DateTimeFormat(pattern = "dd/MM/yyyy") Date date) {
 
         Page<Loan> loans = this.loanService.findFilteredPage(dto, idGame, idClient, date);
 
