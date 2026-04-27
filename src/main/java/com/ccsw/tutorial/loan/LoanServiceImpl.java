@@ -70,23 +70,37 @@ public class LoanServiceImpl implements LoanService {
             loan = this.loanRepository.findById(id).orElse(null);
         }
 
+        // Validar que la fecha de préstamo sea anterior a la fecha de devolución
         if (dto.getLoanDate().isAfter(dto.getReturnDate())) {
             throw new IllegalArgumentException("La fecha de préstamo debe ser anterior a la fecha de devolución.");
         }
 
+        // Validar que el préstamo no dure más de 14 días
         dias = ChronoUnit.DAYS.between(dto.getLoanDate(), dto.getReturnDate()) + 1;
 
         if (dias > 14) {
             throw new IllegalArgumentException("El préstamo no puede durar más de 14 días.");
         }
 
-        specLoanedGame = specLoanedGame.and(LoanSpecification.sameGame(dto.getGame().getId())).and(LoanSpecification.overlapDate(dto.getLoanDate(), dto.getReturnDate())).and(LoanSpecification.excludeId(id));
+        // Verificar que el juego no esté prestado en las fechas indicadas
+        specLoanedGame = specLoanedGame.and(LoanSpecification.sameGame(dto.getGame().getId())).and(LoanSpecification.overlapDate(dto.getLoanDate(), dto.getReturnDate()));
+
+        if (id != null) {
+            specLoanedGame = specLoanedGame.and(LoanSpecification.excludeId(id));
+        }
+
         gameAlreadyLoaned = this.loanRepository.count(specLoanedGame) > 0;
+
         if (gameAlreadyLoaned) {
             throw new IllegalArgumentException("El juego ya está prestado en las fechas indicadas.");
         }
+        
+        // Verificar que el cliente no tenga más de 2 juegos prestados en las fechas indicadas
+        specClientLoanLimitPerDate = specClientLoanLimitPerDate.and(LoanSpecification.sameClient(dto.getClient().getId())).and(LoanSpecification.overlapDate(dto.getLoanDate(), dto.getReturnDate()));
 
-        specClientLoanLimitPerDate = specClientLoanLimitPerDate.and(LoanSpecification.sameClient(dto.getClient().getId())).and(LoanSpecification.overlapDate(dto.getLoanDate(), dto.getReturnDate())).and(LoanSpecification.excludeId(id));
+        if (id != null) {
+            specClientLoanLimitPerDate = specClientLoanLimitPerDate.and(LoanSpecification.excludeId(id));
+        }
 
         List<Loan> loans = this.loanRepository.findAll(specClientLoanLimitPerDate);
 
