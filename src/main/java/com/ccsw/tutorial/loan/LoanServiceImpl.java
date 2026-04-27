@@ -14,6 +14,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 
 @Service
 @Transactional
@@ -50,11 +51,22 @@ public class LoanServiceImpl implements LoanService {
 
     public void save(Long id, LoanDto dto) {
         Loan loan;
+        Long dias;
 
         if (id == null) {
             loan = new Loan();
         } else {
             loan = this.loanRepository.findById(id).orElse(null);
+        }
+
+        if (loan.getLoanDate().isAfter(loan.getReturnDate())) {
+            throw new IllegalArgumentException("La fecha de préstamo debe ser anterior a la fecha de devolución.");
+        }
+
+        dias = ChronoUnit.DAYS.between(loan.getLoanDate(), loan.getReturnDate());
+
+        if (dias > 14) {
+            throw new IllegalArgumentException("El préstamo no puede durar más de 14 días.");
         }
 
         BeanUtils.copyProperties(dto, loan, "id", "game", "client");
