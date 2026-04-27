@@ -5,7 +5,7 @@ import com.ccsw.tutorial.loan.model.Loan;
 import jakarta.persistence.criteria.*;
 import org.springframework.data.jpa.domain.Specification;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 public class LoanSpecification implements Specification<Loan> {
 
@@ -17,7 +17,7 @@ public class LoanSpecification implements Specification<Loan> {
         this.criteria = criteria;
     }
 
-    public static Specification<Loan> dateBetween(Date date) {
+    public static Specification<Loan> dateBetween(LocalDate date) {
         return (Root<Loan> root, CriteriaQuery<?> query, CriteriaBuilder builder) -> builder.and(builder.lessThanOrEqualTo(root.get("loanDate"), date), builder.greaterThanOrEqualTo(root.get("returnDate"), date));
     }
 
