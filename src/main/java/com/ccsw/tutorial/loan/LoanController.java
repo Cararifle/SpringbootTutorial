@@ -12,7 +12,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.stream.Collectors;
 
 @Tag(name = "Loan", description = "API of Loan")
@@ -30,7 +30,7 @@ public class LoanController {
     @Operation(summary = "Find Filtered Page", description = "Method that returns a filtered page of Loans")
     @RequestMapping(path = "", method = RequestMethod.POST)
     public Page<LoanDto> findFilteredPage(@RequestBody LoanSearchDto dto, @RequestParam(value = "idGame", required = false) Long idGame, @RequestParam(value = "idClient", required = false) Long idClient,
-            @RequestParam(value = "date", required = false) @DateTimeFormat(pattern = "dd/MM/yyyy") Date date) {
+            @RequestParam(value = "date", required = false) @DateTimeFormat(pattern = "dd/MM/yyyy") LocalDate date) {
 
         Page<Loan> loans = this.loanService.findFilteredPage(dto, idGame, idClient, date);
 

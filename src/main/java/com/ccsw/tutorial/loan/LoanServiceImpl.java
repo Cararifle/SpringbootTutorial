@@ -13,7 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @Service
 @Transactional
@@ -29,7 +29,7 @@ public class LoanServiceImpl implements LoanService {
     ClientService clientService;
 
     @Override
-    public Page<Loan> findFilteredPage(LoanSearchDto dto, Long idGame, Long idClient, Date date) {
+    public Page<Loan> findFilteredPage(LoanSearchDto dto, Long idGame, Long idClient, LocalDate date) {
 
         Specification<Loan> spec = Specification.unrestricted();
         if (idGame != null) {

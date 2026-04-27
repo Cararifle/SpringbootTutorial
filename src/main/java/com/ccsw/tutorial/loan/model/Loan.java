@@ -4,7 +4,7 @@ import com.ccsw.tutorial.client.model.Client;
 import com.ccsw.tutorial.game.model.Game;
 import jakarta.persistence.*;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "loan")
@@ -24,10 +24,10 @@ public class Loan {
     private Client client;
 
     @Column(name = "loan_date", nullable = false)
-    private Date loanDate;
+    private LocalDate loanDate;
 
     @Column(name = "return_date", nullable = false)
-    private Date returnDate;
+    private LocalDate returnDate;
 
     public Long getId() {
         return id;
@@ -53,19 +53,19 @@ public class Loan {
         this.client = client;
     }
 
-    public Date getLoanDate() {
+    public LocalDate getLoanDate() {
         return loanDate;
     }
 
-    public void setLoanDate(Date loanDate) {
+    public void setLoanDate(LocalDate loanDate) {
         this.loanDate = loanDate;
     }
 
-    public Date getReturnDate() {
+    public LocalDate getReturnDate() {
         return returnDate;
     }
 
-    public void setReturnDate(Date returnDate) {
+    public void setReturnDate(LocalDate returnDate) {
         this.returnDate = returnDate;
     }
 }
