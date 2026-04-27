@@ -26,7 +26,7 @@ public class LoanSpecification implements Specification<Loan> {
     }
 
     public static Specification<Loan> overlapDate(LocalDate start, LocalDate end) {
-        return (root, query, cb) -> cb.and(cb.lessThanOrEqualTo(root.get("loanDate"), end), cb.greaterThanOrEqualTo(root.get("returnLoan"), start));
+        return (root, query, cb) -> cb.and(cb.lessThanOrEqualTo(root.get("loanDate"), end), cb.greaterThanOrEqualTo(root.get("returnDate"), start));
     }
 
     public static Specification<Loan> excludeId(Long id) {
