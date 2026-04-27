@@ -20,3 +20,9 @@ INSERT INTO client(name) VALUES ('Cliente 1');
 INSERT INTO client(name) VALUES ('Cliente 2');
 INSERT INTO client(name) VALUES ('Cliente 3');
 
+INSERT INTO loan(game_id, client_id, loan_date, return_date) VALUES (1,1,'2026-04-24', '2026-04-25');
+INSERT INTO loan(game_id, client_id, loan_date, return_date) VALUES (2,1,'2026-04-26', '2026-04-27');
+INSERT INTO loan(game_id, client_id, loan_date, return_date) VALUES (3,2,'2026-04-28', '2026-04-29');
+INSERT INTO loan(game_id, client_id, loan_date, return_date) VALUES (4,2,'2026-05-02', '2026-05-03');
+INSERT INTO loan(game_id, client_id, loan_date, return_date) VALUES (5,3,'2026-05-04', '2026-05-05');
+INSERT INTO loan(game_id, client_id, loan_date, return_date) VALUES (6,3,'2026-04-06', '2026-04-07');
