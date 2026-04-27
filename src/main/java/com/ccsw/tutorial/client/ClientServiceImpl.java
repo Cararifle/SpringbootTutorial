@@ -2,7 +2,7 @@ package com.ccsw.tutorial.client;
 
 import com.ccsw.tutorial.client.model.Client;
 import com.ccsw.tutorial.client.model.ClientDto;
-import com.ccsw.tutorial.exception.DuplicateClientException;
+import com.ccsw.tutorial.exception.BusinessConflictException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,7 +32,7 @@ public class ClientServiceImpl implements ClientService {
         Client client;
 
         if (clientRepository.existsByName(dto.getName())) {
-            throw new DuplicateClientException("Ya existe un cliente con ese nombre");
+            throw new BusinessConflictException("CLIENT_ALREADY_EXISTS", "Ya existe un cliente con este nombre", "name");
         }
 
         if (id == null) {
