@@ -27,6 +27,11 @@ public class LoanController {
     @Autowired
     ModelMapper mapper;
 
+    /**
+     * Metodo para recuperar una pagina filtrada de {@link Loan}
+     *
+     * @return {@link Page} of {@link LoanDto}
+     */
     @Operation(summary = "Find Filtered Page", description = "Method that returns a filtered page of Loans")
     @RequestMapping(path = "", method = RequestMethod.POST)
     public Page<LoanDto> findFilteredPage(@RequestBody LoanSearchDto dto, @RequestParam(value = "idGame", required = false) Long idGame, @RequestParam(value = "idClient", required = false) Long idClient,
@@ -37,6 +42,12 @@ public class LoanController {
         return new PageImpl<>(loans.getContent().stream().map(e -> mapper.map(e, LoanDto.class)).collect(Collectors.toList()), loans.getPageable(), loans.getTotalElements());
     }
 
+    /**
+     * Metodo para crear o actualizar un {@link Loan}
+     *
+     * @param id  PK de la entidad
+     * @param dto datos de la entidad
+     */
     @Operation(summary = "Save or Update", description = "Method that saves or updates a Loan")
     @RequestMapping(path = { "", "/{id}" }, method = RequestMethod.PUT)
     public void save(@PathVariable(name = "id", required = false) Long id, @RequestBody LoanDto dto) {
@@ -44,6 +55,11 @@ public class LoanController {
         this.loanService.save(id, dto);
     }
 
+    /**
+     * Metodo par eliminar un {@link Loan}
+     *
+     * @param id PK de la entidad
+     */
     @Operation(summary = "Delete", description = "Method that deletes a Loan")
     @RequestMapping(path = "/{id}", method = RequestMethod.DELETE)
     public void delete(@PathVariable(name = "id", required = true) Long id) throws Exception {
