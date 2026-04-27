@@ -2,6 +2,7 @@ package com.ccsw.tutorial.loan;
 
 import com.ccsw.tutorial.client.ClientService;
 import com.ccsw.tutorial.common.criteria.SearchCriteria;
+import com.ccsw.tutorial.exception.BusinessConflictException;
 import com.ccsw.tutorial.game.GameService;
 import com.ccsw.tutorial.loan.model.Loan;
 import com.ccsw.tutorial.loan.model.LoanDto;
@@ -72,14 +73,14 @@ public class LoanServiceImpl implements LoanService {
 
         // Validar que la fecha de préstamo sea anterior a la fecha de devolución
         if (dto.getLoanDate().isAfter(dto.getReturnDate())) {
-            throw new IllegalArgumentException("La fecha de préstamo debe ser anterior a la fecha de devolución.");
+            throw new BusinessConflictException("RETURN_DATE_BEFORE_LOAN_DATE", "La fecha de devolución no puede ser anterior a la fecha de préstamo.", "returnDate");
         }
 
         // Validar que el préstamo no dure más de 14 días
         dias = ChronoUnit.DAYS.between(dto.getLoanDate(), dto.getReturnDate()) + 1;
 
         if (dias > 14) {
-            throw new IllegalArgumentException("El préstamo no puede durar más de 14 días.");
+            throw new BusinessConflictException("LOAN_PERIOD_EXCEEDS_LIMIT", "El período de préstamo no puede exceder los 14 días.", "returnDate");
         }
 
         // Verificar que el juego no esté prestado en las fechas indicadas
@@ -92,9 +93,9 @@ public class LoanServiceImpl implements LoanService {
         gameAlreadyLoaned = this.loanRepository.count(specLoanedGame) > 0;
 
         if (gameAlreadyLoaned) {
-            throw new IllegalArgumentException("El juego ya está prestado en las fechas indicadas.");
+            throw new BusinessConflictException("GAME_ALREADY_LOANED", "El juego ya está prestado en las fechas indicadas.", "game");
         }
-        
+
         // Verificar que el cliente no tenga más de 2 juegos prestados en las fechas indicadas
         specClientLoanLimitPerDate = specClientLoanLimitPerDate.and(LoanSpecification.sameClient(dto.getClient().getId())).and(LoanSpecification.overlapDate(dto.getLoanDate(), dto.getReturnDate()));
 
@@ -111,7 +112,7 @@ public class LoanServiceImpl implements LoanService {
             long loansActiveThisDay = loans.stream().filter(p -> !p.getLoanDate().isAfter(currentDay) && !p.getReturnDate().isBefore(currentDay)).count();
 
             if (loansActiveThisDay + 1 > 2) {
-                throw new IllegalArgumentException("El cliente tendría más de 2 juegos prestados el día " + currentDay);
+                throw new BusinessConflictException("CLIENT_LOAN_LIMIT_EXCEEDED", "El cliente no puede tener más de 2 juegos prestados el día " + currentDay, "loanDate");
             }
         }
 
