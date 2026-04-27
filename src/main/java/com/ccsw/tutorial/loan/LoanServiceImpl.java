@@ -29,6 +29,9 @@ public class LoanServiceImpl implements LoanService {
     @Autowired
     ClientService clientService;
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Page<Loan> findFilteredPage(LoanSearchDto dto, Long idGame, Long idClient, LocalDate date) {
 
@@ -49,6 +52,9 @@ public class LoanServiceImpl implements LoanService {
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void save(Long id, LoanDto dto) {
         Loan loan;
         Long dias;
@@ -77,6 +83,9 @@ public class LoanServiceImpl implements LoanService {
         this.loanRepository.save(loan);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void delete(Long id) throws Exception {
 
         if (this.loanRepository.findById(id).orElse(null) == null) {
