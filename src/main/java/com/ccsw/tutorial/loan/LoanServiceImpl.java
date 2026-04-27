@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 
 @Service
 @Transactional
@@ -55,9 +56,13 @@ public class LoanServiceImpl implements LoanService {
     /**
      * {@inheritDoc}
      */
+    @Transactional
     public void save(Long id, LoanDto dto) {
         Loan loan;
         Long dias;
+        Specification<Loan> specLoanedGame = Specification.unrestricted();
+        Specification<Loan> specClientLoanLimitPerDate = Specification.unrestricted();
+        boolean gameAlreadyLoaned;
 
         if (id == null) {
             loan = new Loan();
@@ -65,14 +70,35 @@ public class LoanServiceImpl implements LoanService {
             loan = this.loanRepository.findById(id).orElse(null);
         }
 
-        if (loan.getLoanDate().isAfter(loan.getReturnDate())) {
+        if (dto.getLoanDate().isAfter(dto.getReturnDate())) {
             throw new IllegalArgumentException("La fecha de préstamo debe ser anterior a la fecha de devolución.");
         }
 
-        dias = ChronoUnit.DAYS.between(loan.getLoanDate(), loan.getReturnDate());
+        dias = ChronoUnit.DAYS.between(dto.getLoanDate(), dto.getReturnDate()) + 1;
 
         if (dias > 14) {
             throw new IllegalArgumentException("El préstamo no puede durar más de 14 días.");
+        }
+
+        specLoanedGame = specLoanedGame.and(LoanSpecification.sameGame(dto.getGame().getId())).and(LoanSpecification.overlapDate(dto.getLoanDate(), dto.getReturnDate())).and(LoanSpecification.excludeId(id));
+        gameAlreadyLoaned = this.loanRepository.count(specLoanedGame) > 0;
+        if (gameAlreadyLoaned) {
+            throw new IllegalArgumentException("El juego ya está prestado en las fechas indicadas.");
+        }
+
+        specClientLoanLimitPerDate = specClientLoanLimitPerDate.and(LoanSpecification.sameClient(dto.getClient().getId())).and(LoanSpecification.overlapDate(dto.getLoanDate(), dto.getReturnDate())).and(LoanSpecification.excludeId(id));
+
+        List<Loan> loans = this.loanRepository.findAll(specClientLoanLimitPerDate);
+
+        for (LocalDate day = dto.getLoanDate(); !day.isAfter(dto.getReturnDate()); day = day.plusDays(1)) {
+
+            final LocalDate currentDay = day;
+
+            long loansActiveThisDay = loans.stream().filter(p -> !p.getLoanDate().isAfter(currentDay) && !p.getReturnDate().isBefore(currentDay)).count();
+
+            if (loansActiveThisDay + 1 > 2) {
+                throw new IllegalArgumentException("El cliente tendría más de 2 juegos prestados el día " + currentDay);
+            }
         }
 
         BeanUtils.copyProperties(dto, loan, "id", "game", "client");
