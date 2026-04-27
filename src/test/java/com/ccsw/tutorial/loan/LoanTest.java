@@ -2,10 +2,12 @@ package com.ccsw.tutorial.loan;
 
 import com.ccsw.tutorial.client.ClientService;
 import com.ccsw.tutorial.client.model.Client;
+import com.ccsw.tutorial.client.model.ClientDto;
 import com.ccsw.tutorial.common.pagination.PageableRequest;
 import com.ccsw.tutorial.exception.BusinessConflictException;
 import com.ccsw.tutorial.game.GameService;
 import com.ccsw.tutorial.game.model.Game;
+import com.ccsw.tutorial.game.model.GameDto;
 import com.ccsw.tutorial.loan.model.Loan;
 import com.ccsw.tutorial.loan.model.LoanDto;
 import com.ccsw.tutorial.loan.model.LoanSearchDto;
@@ -135,10 +137,10 @@ public class LoanTest {
 
     private LoanDto buildLoanDto(LocalDate loanDate, LocalDate returnDate, Long gameId, Long clientId) {
 
-        com.ccsw.tutorial.game.model.GameDto gameDto = new com.ccsw.tutorial.game.model.GameDto();
+        GameDto gameDto = new GameDto();
         gameDto.setId(gameId);
 
-        com.ccsw.tutorial.client.model.ClientDto clientDto = new com.ccsw.tutorial.client.model.ClientDto();
+        ClientDto clientDto = new com.ccsw.tutorial.client.model.ClientDto();
         clientDto.setId(clientId);
 
         LoanDto dto = new LoanDto();
