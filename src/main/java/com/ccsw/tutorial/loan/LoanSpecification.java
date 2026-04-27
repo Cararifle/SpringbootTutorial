@@ -17,6 +17,22 @@ public class LoanSpecification implements Specification<Loan> {
         this.criteria = criteria;
     }
 
+    public static Specification<Loan> sameGame(Long gameId) {
+        return (root, query, cb) -> cb.equal(root.get("game").get("id"), gameId);
+    }
+
+    public static Specification<Loan> sameClient(Long clientId) {
+        return (root, query, cb) -> cb.equal(root.get("client").get("id"), clientId);
+    }
+
+    public static Specification<Loan> overlapDate(LocalDate start, LocalDate end) {
+        return (root, query, cb) -> cb.and(cb.lessThanOrEqualTo(root.get("loanDate"), end), cb.greaterThanOrEqualTo(root.get("returnLoan"), start));
+    }
+
+    public static Specification<Loan> excludeId(Long id) {
+        return (root, query, cb) -> cb.notEqual(root.get("id"), id);
+    }
+
     public static Specification<Loan> dateBetween(LocalDate date) {
         return (Root<Loan> root, CriteriaQuery<?> query, CriteriaBuilder builder) -> builder.and(builder.lessThanOrEqualTo(root.get("loanDate"), date), builder.greaterThanOrEqualTo(root.get("returnDate"), date));
     }
